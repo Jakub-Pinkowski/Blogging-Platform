@@ -3,11 +3,11 @@
 /* TODO: Change colors */
 :root {
     --color-bg: #eef0f1;
-    --color-text: #08090a;
-    --color-blue: #3b49df;
+    --color-text: #0d1321;
+    --color-blue: #3e5c76;
     --color-red: #df3b3b;
     --color-green: #3bdf72;
-    --color-gray: #b5bdc4;
+    --color-gray: #f0ebd8;
 }
 html,
 body {
@@ -202,15 +202,24 @@ button.btn-logo {
 /* Loader */
 
 .loader {
-    border: 10px solid var(--color-bg);
-    border-top: 10px solid var(--color-blue);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
+    display: inline-block;
+    width: 80px;
+    height: 80px;
 }
 
-@keyframes spin {
+/* TODO: Change loader color */
+.loader:after {
+    content: ' ';
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #748cab;
+    border-color: #748cab transparent #748cab transparent;
+    animation: loader 1.2s linear infinite;
+}
+@keyframes loader {
     0% {
         transform: rotate(0deg);
     }
