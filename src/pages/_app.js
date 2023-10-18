@@ -8,6 +8,8 @@ import { UserContext } from '@/lib/context'
 import Navbar from '@/components/Navbar'
 
 export default function App({ Component, pageProps }) {
+    
+
     return (
         <UserContext.Provider value={{ user: {}, username: 'johndoe' }}>
             <Navbar />
