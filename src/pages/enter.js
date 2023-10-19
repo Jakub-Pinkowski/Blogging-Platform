@@ -39,16 +39,18 @@ const UsernameForm = () => {
     const onChange = (event) => {
         // Force form value typed in form to match correct format
         const val = event.target.value.toLowerCase()
-        const regex = /^\w*$/
-        if (regex.test(val)) {
+        const regex = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/
+
+        if (val.length < 3) {
             setFormValue(val)
-            setIsValid(true)
+            setLoading(false)
+            setIsValid(false)
         }
 
         if (regex.test(val)) {
             setFormValue(val)
             setLoading(true)
-            setIsValid(true)
+            setIsValid(false)
         }
     }
 
@@ -60,19 +62,15 @@ const UsernameForm = () => {
         const usernameDoc = firestore.doc(`usernames/${formValue}`)
 
         // Commit both docs together as a batch write.
-        try {
-            const batch = firestore.batch()
-            batch.set(userDoc, {
-                username: formValue,
-                photoURL: user.photoURL,
-                displayName: user.displayName,
-            })
-            batch.set(usernameDoc, { uid: user.uid })
+        const batch = firestore.batch()
+        batch.set(userDoc, {
+            username: formValue,
+            photoURL: user.photoURL,
+            displayName: user.displayName,
+        })
+        batch.set(usernameDoc, { uid: user.uid })
 
-            await batch.commit()
-        } catch (error) {
-            console.log(error)
-        }
+        await batch.commit()
     }
 
     //
@@ -97,15 +95,15 @@ const UsernameForm = () => {
     return (
         !username && (
             <section>
-                <h3>Choose Udername</h3>
-                <form>
+                <h3>Choose Username</h3>
+                <form onSubmit={onSubmit}>
                     <input
                         name="username"
                         placeholder="myname"
                         value={formValue}
                         onChange={onChange}
                     />
-
+                    <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
                     <button type="submit" className="btn-green" disabled={!isValid}>
                         Choose
                     </button>
@@ -117,10 +115,21 @@ const UsernameForm = () => {
                         Loading: {loading.toString()}
                         <br />
                         Username Valid: {isValid.toString()}
-                        <br />
                     </div>
                 </form>
             </section>
         )
     )
+}
+
+const UsernameMessage = ({ username, isValid, loading }) => {
+    if (loading) {
+        return <p>Checking...</p>
+    } else if (isValid) {
+        return <p className="text-success">{username} is available!</p>
+    } else if (username && !isValid) {
+        return <p className="text-danger">That username is invalid/taken!</p>
+    } else {
+        return <p></p>
+    }
 }
