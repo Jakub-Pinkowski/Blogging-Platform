@@ -1,16 +1,17 @@
+import styles from '@/styles/Admin.module.css'
+import AuthCheck from '@/components/AuthCheck'
+import { firestore, auth, serverTimestamp } from '@lib/firebase'
+
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { useForm } from 'react-hook-form'
 import ReactMarkdown from 'react-markdown'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
-import styles from '@/styles/Admin.module.css'
-import AuthCheck from '@/components/AuthCheck'
-import { firestore, auth, serverTimestamp } from '@/lib/firebase'
-
-export default function AdminPostEdit({}) {
+export default function AdminPostEdit(props) {
     return (
         <AuthCheck>
             <PostManager />
@@ -58,10 +59,19 @@ function PostManager() {
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
-    const { register, handleSubmit, reset, watch } = useForm({
-        defaultValues,
-        mode: 'onChange',
-    })
+    const { register, handleSubmit, reset, watch } = useForm({ defaultValues, mode: 'onChange' })
+
+    const updatePost = async ({ content, published }) => {
+        await postRef.update({
+            content,
+            published,
+            updatedAt: serverTimestamp(),
+        })
+
+        reset({ content, published })
+
+        toast.success('Post updated successfully!')
+    }
 
     return (
         <form onSubmit={handleSubmit(updatePost)}>
