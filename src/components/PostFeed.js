@@ -13,12 +13,12 @@ const PostItem = ({ post, admin = false }) => {
     return (
         <div className="card">
             <Link href={`/${post.username}`}>
-                <a>
-                    <strong>By @{post.username}</strong>
-                </a>
+
+                <strong>By @{post.username}</strong>
+
             </Link>
 
-            <Link href={`/${post.username}/${post.slug}`}>
+            <Link href={`/${post.username}/${post.slug}`} legacyBehavior>
                 <h2>
                     <a>{post.title}</a>
                 </h2>
@@ -31,5 +31,5 @@ const PostItem = ({ post, admin = false }) => {
                 <span className="push-left">💗 {post.heartCount || 0} Hearts</span>
             </footer>
         </div>
-    )
+    );
 }
