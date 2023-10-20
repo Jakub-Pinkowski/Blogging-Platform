@@ -59,10 +59,12 @@ function PostManager() {
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
-    const { register, handleSubmit, reset, watch } = useForm({
+    const { register, handleSubmit, reset, watch, formState, errors } = useForm({
         defaultValues,
         mode: 'onChange',
     })
+
+    const { isValid, isDirty } = formState
 
     const updatePost = async ({ content, published }) => {
         await postRef.update({
@@ -104,7 +106,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                     <label>Published</label>
                 </fieldset>
 
-                <button type="submit" className="btn-green">
+                <button type="submit" className="btn-green" disabed={!isDirty || !isValid}>
                     Save Changes
                 </button>
             </div>
