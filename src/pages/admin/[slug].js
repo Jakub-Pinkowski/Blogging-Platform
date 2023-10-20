@@ -1,11 +1,12 @@
-import styles from '@/styles/Admin.module.css'
-import AuthCheck from '@/components/AuthCheck'
-import { firestore, auth, serverTimestamp } from '../../lib/firebase'
+import styles from '@styles/Admin.module.css'
+import AuthCheck from '@components/AuthCheck'
+import { firestore, auth, serverTimestamp } from '@lib/firebase'
+import ImageUploader from '@components/ImageUploader'
 
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
-import { useDocumentData } from 'react-firebase-hooks/firestore'
+import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
 import { useForm } from 'react-hook-form'
 import ReactMarkdown from 'react-markdown'
 import Link from 'next/link'
@@ -30,7 +31,7 @@ function PostManager() {
         .doc(auth.currentUser.uid)
         .collection('posts')
         .doc(slug)
-    const [post] = useDocumentData(postRef)
+    const [post] = useDocumentDataOnce(postRef)
 
     return (
         <main className={styles.container}>
@@ -51,6 +52,7 @@ function PostManager() {
                         <Link href={`/${post.username}/${post.slug}`}>
                             <button className="btn-blue">Live view</button>
                         </Link>
+                        <DeletePostButton postRef={postRef} />
                     </aside>
                 </>
             )}
@@ -59,7 +61,7 @@ function PostManager() {
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
-    const { register, handleSubmit, reset, watch, formState, errors } = useForm({
+    const { register, errors, handleSubmit, formState, reset, watch } = useForm({
         defaultValues,
         mode: 'onChange',
     })
@@ -87,6 +89,8 @@ function PostForm({ defaultValues, postRef, preview }) {
             )}
 
             <div className={preview ? styles.hidden : styles.controls}>
+                <ImageUploader />
+
                 <textarea
                     name="content"
                     {...register('content', {
@@ -96,7 +100,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                     })}
                 ></textarea>
 
-                {/* TODO: Show error message */}
+                {errors.content && <p className="text-danger">{errors.content.message}</p>}
 
                 <fieldset>
                     <input
@@ -113,5 +117,24 @@ function PostForm({ defaultValues, postRef, preview }) {
                 </button>
             </div>
         </form>
+    )
+}
+
+function DeletePostButton({ postRef }) {
+    const router = useRouter()
+
+    const deletePost = async () => {
+        const doIt = confirm('are you sure!')
+        if (doIt) {
+            await postRef.delete()
+            router.push('/admin')
+            toast('post annihilated ', { icon: '🗑️' })
+        }
+    }
+
+    return (
+        <button className="btn-red" onClick={deletePost}>
+            Delete
+        </button>
     )
 }
