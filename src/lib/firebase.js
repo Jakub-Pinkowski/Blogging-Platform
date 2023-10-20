@@ -21,7 +21,7 @@ export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
 export const firestore = firebase.firestore()
 export const storage = firebase.storage()
 
-// helper functions
+// Helper functions
 
 /**
  * Gets a users/{uid} document with username
