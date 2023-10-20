@@ -11,9 +11,10 @@ export default function Custom404() {
                 frameBorder="0"
                 allowFullScreen
             ></iframe>
-            <Link href="/" legacyBehavior>
+            <Link href="/">
                 <button className="btn-blue">Go home</button>
             </Link>
         </main>
     )
 }
+Ū
