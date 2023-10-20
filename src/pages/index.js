@@ -2,6 +2,7 @@ import styles from '@/styles/Home.module.css'
 import { firestore, fromMillis, postToJSON } from '@/lib/firebase'
 import { useState } from 'react'
 
+import Metatags from '@/components/Metatags'
 import Loader from '@/components/Loader'
 import PostFeed from '@/components/PostFeed'
 
@@ -53,6 +54,7 @@ export default function Home(props) {
 
     return (
         <main>
+            <Metatags />
             <PostFeed posts={posts} />
 
             {!loading && !postsEnd && (
