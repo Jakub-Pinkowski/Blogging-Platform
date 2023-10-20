@@ -17,4 +17,3 @@ export default function Custom404() {
         </main>
     );
 }
-Ū

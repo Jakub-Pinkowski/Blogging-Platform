@@ -1,4 +1,4 @@
-import styles from '@/Admin.module.css'
+import styles from '@/styles/Admin.module.css'
 import AuthCheck from '@/components/AuthCheck'
 import { firestore, auth, serverTimestamp } from '@/lib/firebase'
 import ImageUploader from '@/components/ImageUploader'
@@ -57,7 +57,7 @@ function PostManager() {
                 </>
             )}
         </main>
-    );
+    )
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
@@ -99,8 +99,6 @@ function PostForm({ defaultValues, postRef, preview }) {
                         required: { value: true, message: 'content is required' },
                     })}
                 ></textarea>
-
-                {errors.content && <p className="text-danger">{errors.content.message}</p>}
 
                 <fieldset>
                     <input
