@@ -96,6 +96,10 @@ function PostForm({ defaultValues, postRef, preview }) {
                     })}
                 ></textarea>
 
+                {/* TODO: Fix error message */}
+
+                {errors && <p className="text-danger">{errors.message}</p>}
+
                 <fieldset>
                     <input
                         className={styles.checkbox}
@@ -106,7 +110,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                     <label>Published</label>
                 </fieldset>
 
-                <button type="submit" className="btn-green" disabed={!isDirty || !isValid}>
+                <button type="submit" className="btn-green" disabled={!isDirty || !isValid}>
                     Save Changes
                 </button>
             </div>
