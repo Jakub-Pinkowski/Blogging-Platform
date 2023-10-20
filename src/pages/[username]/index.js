@@ -1,7 +1,7 @@
-import UserProfile from '../../components/UserProfile'
-import PostFeed from '../../components/PostFeed'
-import Metatags from '@/components/Metatags'
-import { getUserWithUsername, postToJSON } from '../../lib/firebase'
+import { getUserWithUsername, postToJSON } from '@lib/firebase'
+import UserProfile from '@components/UserProfile'
+import Metatags from '@components/Metatags'
+import PostFeed from '@components/PostFeed'
 
 export async function getServerSideProps({ query }) {
     const { username } = query
@@ -25,7 +25,6 @@ export async function getServerSideProps({ query }) {
             .where('published', '==', true)
             .orderBy('createdAt', 'desc')
             .limit(5)
-
         posts = (await postsQuery.get()).docs.map(postToJSON)
     }
 
