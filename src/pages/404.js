@@ -15,5 +15,5 @@ export default function Custom404() {
                 <button className="btn-blue">Go home</button>
             </Link>
         </main>
-    );
+    )
 }
