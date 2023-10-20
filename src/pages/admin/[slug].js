@@ -49,7 +49,7 @@ function PostManager() {
                         <button onClick={() => setPreview(!preview)}>
                             {preview ? 'Edit' : 'Preview'}
                         </button>
-                        <Link href={`/${post.username}/${post.slug}`}>
+                        <Link href={`/${post.username}/${post.slug}`} legacyBehavior>
                             <button className="btn-blue">Live view</button>
                         </Link>
                         <DeletePostButton postRef={postRef} />
@@ -57,7 +57,7 @@ function PostManager() {
                 </>
             )}
         </main>
-    )
+    );
 }
 
 function PostForm({ defaultValues, postRef, preview }) {

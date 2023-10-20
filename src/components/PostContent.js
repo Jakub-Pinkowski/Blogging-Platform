@@ -10,12 +10,12 @@ export default function PostContent({ post }) {
             <h1>{post?.title}</h1>
             <span className="text-sm">
                 Written by{' '}
-                <Link href={`/${post.username}/`}>
-                    <a className="text-info">@{post.username}</a>
+                <Link href={`/${post.username}/`} className="text-info">
+                    @{post.username}
                 </Link>{' '}
                 on {createdAt.toISOString()}
             </span>
             <ReactMarkdown>{post?.content}</ReactMarkdown>
         </div>
-    )
+    );
 }
