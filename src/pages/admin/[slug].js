@@ -96,9 +96,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                     })}
                 ></textarea>
 
-                {/* TODO: Fix error message */}
-
-                {errors && <p className="text-danger">{errors.message}</p>}
+                {/* TODO: Show error message */}
 
                 <fieldset>
                     <input
