@@ -8,7 +8,6 @@ export default function Heart({ postRef }) {
     const [heartDoc] = useDocument(heartRef)
     console.log(heartDoc)
 
-    // Create a user-to-post relationship
     const addHeart = async () => {
         const uid = auth.currentUser.uid
         const batch = firestore.batch()
@@ -19,7 +18,6 @@ export default function Heart({ postRef }) {
         await batch.commit()
     }
 
-    // Remove a user-to-post relationship
     // TODO: Fix multiple hearts
     const removeHeart = async () => {
         const batch = firestore.batch()
