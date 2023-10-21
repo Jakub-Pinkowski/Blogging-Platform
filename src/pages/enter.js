@@ -1,6 +1,7 @@
 import { auth, firestore, googleAuthProvider } from '@/lib/firebase'
 import { UserContext } from '@/lib/context'
 import Metatags from '@/components/Metatags'
+import { useRouter } from 'next/router'
 
 import { useEffect, useState, useCallback, useContext } from 'react'
 import debounce from 'lodash.debounce'
@@ -21,8 +22,10 @@ export default function Enter(props) {
 
 // Sign in with Google button
 function SignInButton() {
+    const router = useRouter()
     const signInWithGoogle = async () => {
         await auth.signInWithPopup(googleAuthProvider)
+        router.push('/admin')
     }
 
     return (
