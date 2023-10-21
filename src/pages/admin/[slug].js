@@ -104,7 +104,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                     })}
                 ></textarea>
 
-                <div className='button-container'>
+                <div className="button-container">
                     <button
                         type="button"
                         className="btn-green"
@@ -123,7 +123,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                         }}
                         disabled={!isDirty || !isValid}
                     >
-                        Save Draft
+                        Save as a Draft
                     </button>
                 </div>
             </div>
