@@ -7,7 +7,7 @@
     --color-blue: #3e5c76;
     --color-red: #c1121f;
     --color-green: #588157;
-    --color-gray: #ccd5e0;
+    --color-gray: #fdf0d5;
 }
 html,
 body {
@@ -203,20 +203,20 @@ button.btn-logo {
 
 .loader {
     display: inline-block;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
 }
 
 /* TODO: Change loader color */
 .loader:after {
     content: ' ';
     display: block;
-    width: 64px;
-    height: 64px;
+    width: 50px;
+    height: 50px;
     margin: 8px;
     border-radius: 50%;
-    border: 6px solid #748cab;
-    border-color: #748cab transparent #748cab transparent;
+    border: 6px solid var(--color-blue);
+    border-color: var(--color-blue) transparent var(--color-blue) transparent;
     animation: loader 1.2s linear infinite;
 }
 @keyframes loader {
