@@ -77,7 +77,11 @@ function PostForm({ defaultValues, postRef, preview }) {
 
         reset({ content, published })
 
-        toast.success('Post updated successfully!')
+        if (published) {
+            toast.success('Post published successfully!')
+        } else {
+            toast.success('Draft saved successfully.')
+        }
     }
 
     return (
@@ -100,19 +104,28 @@ function PostForm({ defaultValues, postRef, preview }) {
                     })}
                 ></textarea>
 
-                <fieldset>
-                    <input
-                        className={styles.checkbox}
-                        name="published"
-                        type="checkbox"
-                        {...register('published')}
-                    />
-                    <label>Published</label>
-                </fieldset>
-
-                <button type="submit" className="btn-green" disabled={!isDirty || !isValid}>
-                    Save Changes
-                </button>
+                <div className='button-container'>
+                    <button
+                        type="button"
+                        className="btn-green"
+                        onClick={() => {
+                            handleSubmit((data) => updatePost({ ...data, published: true }))()
+                        }}
+                        disabled={!isDirty || !isValid}
+                    >
+                        Publish Post
+                    </button>
+                    <button
+                        type="button"
+                        className="btn-blue"
+                        onClick={() => {
+                            handleSubmit((data) => updatePost({ ...data, published: false }))()
+                        }}
+                        disabled={!isDirty || !isValid}
+                    >
+                        Save Draft
+                    </button>
+                </div>
             </div>
         </form>
     )

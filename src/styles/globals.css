@@ -104,6 +104,10 @@ code {
 
 /* Buttons */
 
+.button-container{
+    display: flex;
+}
+
 .btn,
 button {
     background-color: var(--color-gray);
