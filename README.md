@@ -1,1 +1,3 @@
-# BLogging Platform made with Next.js
+# Blogging Platform
+
+## Made with Next.js
