@@ -33,6 +33,7 @@ export default function Home(props) {
         setLoading(true)
         const last = posts[posts.length - 1]
 
+        // Consider a possibility of no posts
         const cursor =
             typeof last.createdAt === 'number' ? fromMillis(last.createdAt) : last.createdAt
 

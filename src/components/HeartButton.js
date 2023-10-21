@@ -6,6 +6,7 @@ export default function Heart({ postRef }) {
     // Listen to heart document for currently logged in user
     const heartRef = postRef.collection('hearts').doc(auth.currentUser.uid)
     const [heartDoc] = useDocument(heartRef)
+    console.log(heartDoc)
 
     // Create a user-to-post relationship
     const addHeart = async () => {
@@ -19,6 +20,7 @@ export default function Heart({ postRef }) {
     }
 
     // Remove a user-to-post relationship
+    // TODO: Fix multiple hearts
     const removeHeart = async () => {
         const batch = firestore.batch()
 
