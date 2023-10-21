@@ -1,36 +1,36 @@
-import { firestore, auth, increment } from '@/lib/firebase'
+import { firestore, auth, increment } from '../lib/firebase'
 import { useDocument } from 'react-firebase-hooks/firestore'
 
-// Allows user to heart or like a post
+import { useState } from 'react'
+
 export default function Heart({ postRef }) {
-    // Listen to heart document for currently logged in user
-    const heartRef = postRef.collection('hearts').doc(auth.currentUser.uid)
+    const uid = auth.currentUser?.uid
+    const heartRef = postRef.collection('hearts').doc(uid)
     const [heartDoc] = useDocument(heartRef)
-    console.log(heartDoc)
+
+    const [isHearted, setIsHearted] = useState(false)
+
+    if (typeof heartDoc === 'string') {
+        setIsHearted(true)
+    }
 
     const addHeart = async () => {
-        const uid = auth.currentUser.uid
         const batch = firestore.batch()
 
-        batch.update(postRef, { heartCount: increment(1) })
-        batch.set(heartRef, { uid })
+        if (isHearted) {
+            // If the user has hearted the post, unheart it
+            batch.update(postRef, { heartCount: increment(-1) })
+            batch.delete(heartRef)
+            setIsHearted(false)
+        } else {
+            // If the user has not hearted the post, add the heart
+            batch.update(postRef, { heartCount: increment(1) })
+            batch.set(heartRef, { uid })
+            setIsHearted(true)
+        }
 
         await batch.commit()
     }
 
-    // TODO: Fix multiple hearts
-    const removeHeart = async () => {
-        const batch = firestore.batch()
-
-        batch.update(postRef, { heartCount: increment(-1) })
-        batch.delete(heartRef)
-
-        await batch.commit()
-    }
-
-    return heartDoc?.exists ? (
-        <button onClick={removeHeart}>💔 Unheart</button>
-    ) : (
-        <button onClick={addHeart}>💗 Heart</button>
-    )
+    return <button onClick={addHeart}>{isHearted ? '💔 Unheart' : '💗 Heart'}</button>
 }
