@@ -9,19 +9,30 @@ import debounce from 'lodash.debounce'
 export default function Enter(props) {
     const { user, username } = useContext(UserContext)
 
-    // 1. user signed out <SignInButton />
+    // 1. user signed out <SignInWithGoogle /> and <SignInWithEmail />
     // 2. user signed in, but missing username <UsernameForm />
     // 3. user signed in, has username <SignOutButton />
     return (
         <main>
             <Metatags title="Enter" description="Sign up for this amazing app!" />
-            {user ? !username ? <UsernameForm /> : <SignOutButton /> : <SignInButton />}
+            {user ? (
+                !username ? (
+                    <UsernameForm />
+                ) : (
+                    <SignOutButton />
+                )
+            ) : (
+                <>
+                    <SignInWithGoogle />
+                    <SignInWithEmail />
+                </>
+            )}
         </main>
     )
 }
 
 // Sign in with Google button
-function SignInButton() {
+function SignInWithGoogle() {
     const router = useRouter()
     const signInWithGoogle = async () => {
         await auth.signInWithPopup(googleAuthProvider)
@@ -34,6 +45,69 @@ function SignInButton() {
                 <img src={'/google.png'} width="30px" /> Sign in with Google
             </button>
         </>
+    )
+}
+
+// Sign in with email/password
+function SignInWithEmail() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isRegistering, setIsRegistering] = useState(false)
+    const [error, setError] = useState(null)
+
+    const router = useRouter()
+    const { user } = useContext(UserContext)
+
+    const handleLogin = async (event) => {
+        event.preventDefault()
+
+        try {
+            await auth.signInWithEmailAndPassword(email, password)
+            router.push('/admin')
+        } catch (error) {
+            setError(error.message)
+        }
+    }
+
+    const handleRegister = async (e) => {
+        e.preventDefault()
+
+        try {
+            await auth.createUserWithEmailAndPassword(email, password)
+            router.push('/admin')
+        } catch (error) {
+            setError(error.message)
+        }
+    }
+
+    return (
+        <div>
+            <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+            {error && <p className="text-danger">{error}</p>}
+            <form onSubmit={isRegistering ? handleRegister : handleLogin}>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
+            </form>
+            <p>
+                {isRegistering ? 'Already have an account?' : "Don't have an account?"}
+                <button onClick={() => setIsRegistering(!isRegistering)}>
+                    {isRegistering ? 'Login' : 'Register'}
+                </button>
+            </p>
+        </div>
     )
 }
 
