@@ -3,17 +3,21 @@ import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { UserContext } from '@/lib/context'
 import { auth } from '@/lib/firebase'
+import icon from '@/assets/images/user.png'
 
 // Top navbar
 export default function Navbar() {
     const { user, username } = useContext(UserContext)
-
+    console.log('user', user)
+    console.log('username', username)
     const router = useRouter()
 
     const signOut = () => {
         auth.signOut()
         router.reload()
     }
+
+
 
     return (
         <nav className="navbar">
@@ -37,7 +41,7 @@ export default function Navbar() {
                         </li>
                         <li>
                             <Link href={`/${username}`} legacyBehavior>
-                                <img src={user?.photoURL || '/hacker.png'} />
+                                <img src={user.photoURL || icon} />
                             </Link>
                         </li>
                     </>
@@ -53,5 +57,5 @@ export default function Navbar() {
                 )}
             </ul>
         </nav>
-    );
+    )
 }

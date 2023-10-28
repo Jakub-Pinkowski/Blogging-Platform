@@ -142,7 +142,7 @@ function UsernameForm() {
         const batch = firestore.batch()
         batch.set(userDoc, {
             username: formValue,
-            photoURL: user.photoURL,
+            photoURL: user.photoURL || 'https://thispersondoesnotexist.com',
             displayName: user.displayName || formValue,
         })
         batch.set(usernameDoc, { uid: user.uid })
