@@ -54,6 +54,7 @@ function SignInWithEmail() {
     const [password, setPassword] = useState('')
     const [isRegistering, setIsRegistering] = useState(false)
     const [error, setError] = useState(null)
+    const [registrationSuccess, setRegistrationSuccess] = useState(false) // New state
 
     const router = useRouter()
     const { user } = useContext(UserContext)
@@ -74,7 +75,7 @@ function SignInWithEmail() {
 
         try {
             await auth.createUserWithEmailAndPassword(email, password)
-            router.push('/admin')
+            setRegistrationSuccess(true)
         } catch (error) {
             setError(error.message)
         }
@@ -82,31 +83,37 @@ function SignInWithEmail() {
 
     return (
         <div>
-            <h2>{isRegistering ? 'Register' : 'Login'}</h2>
-            {error && <p className="text-danger">{error}</p>}
-            <form onSubmit={isRegistering ? handleRegister : handleLogin}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
-            </form>
-            <p>
-                {isRegistering ? 'Already have an account?' : "Don't have an account?"}
-                <button onClick={() => setIsRegistering(!isRegistering)}>
-                    {isRegistering ? 'Login' : 'Register'}
-                </button>
-            </p>
+            {registrationSuccess ? ( // Render UsernameForm when registration is successful
+                <UsernameForm />
+            ) : (
+                <>
+                    <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+                    {error && <p className="text-danger">{error}</p>}
+                    <form onSubmit={isRegistering ? handleRegister : handleLogin}>
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
+                    </form>
+                    <p>
+                        {isRegistering ? 'Already have an account?' : "Don't have an account?"}
+                        <button onClick={() => setIsRegistering(!isRegistering)}>
+                            {isRegistering ? 'Login' : 'Register'}
+                        </button>
+                    </p>
+                </>
+            )}
         </div>
     )
 }
@@ -131,12 +138,12 @@ function UsernameForm() {
         const userDoc = firestore.doc(`users/${user.uid}`)
         const usernameDoc = firestore.doc(`usernames/${formValue}`)
 
-        // Commit both docs together as a batch write.
+        // If the user has no displayName, set it equal to the username
         const batch = firestore.batch()
         batch.set(userDoc, {
             username: formValue,
             photoURL: user.photoURL,
-            displayName: user.displayName,
+            displayName: user.displayName || formValue,
         })
         batch.set(usernameDoc, { uid: user.uid })
 
