@@ -135,7 +135,7 @@ function DeletePostButton({ postRef }) {
     const router = useRouter()
 
     const deletePost = async () => {
-        const doIt = confirm('are you sure!')
+        const doIt = confirm('Are you sure?')
         if (doIt) {
             await postRef.delete()
             router.push('/admin')
