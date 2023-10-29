@@ -1,10 +1,11 @@
+import { useRouter } from 'next/router'
+import { useEffect, useState, useCallback, useContext } from 'react'
+import debounce from 'lodash.debounce'
+
 import { auth, firestore, googleAuthProvider, storage } from '@/lib/firebase'
 import { UserContext } from '@/lib/context'
 import Metatags from '@/components/Metatags'
-import { useRouter } from 'next/router'
-
-import { useEffect, useState, useCallback, useContext } from 'react'
-import debounce from 'lodash.debounce'
+import styles from '@/styles/Enter.module.css'
 
 export default function Enter(props) {
     const { user, username } = useContext(UserContext)
@@ -41,9 +42,12 @@ function SignInWithGoogle() {
 
     return (
         <>
-            <button className="btn-google" onClick={signInWithGoogle}>
-                <img src={'/google.png'} width="30px" /> Sign in with Google
-            </button>
+            <div className={styles.container}>
+                <button className="btn-google" onClick={signInWithGoogle}>
+                    <img src={'/google.png'} width="30px" />
+                    <h2> Sign in with Google </h2>
+                </button>
+            </div>
         </>
     )
 }
@@ -82,38 +86,36 @@ function SignInWithEmail() {
     }
 
     return (
-        <div>
-            {registrationSuccess ? ( // Render UsernameForm when registration is successful
-                <UsernameForm />
-            ) : (
-                <>
-                    <h2>{isRegistering ? 'Register' : 'Login'}</h2>
-                    {error && <p className="text-danger">{error}</p>}
-                    <form onSubmit={isRegistering ? handleRegister : handleLogin}>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
-                    </form>
-                    <p>
-                        {isRegistering ? 'Already have an account?' : "Don't have an account?"}
-                        <button onClick={() => setIsRegistering(!isRegistering)}>
-                            {isRegistering ? 'Login' : 'Register'}
-                        </button>
-                    </p>
-                </>
-            )}
+        <div className={styles.container}>
+            <h2 className={styles.header}>Sign in with email/password instead</h2>
+            <h3 className={styles.title}>{isRegistering ? 'Register' : 'Login'}</h3>
+            <form className={styles.form} onSubmit={isRegistering ? handleRegister : handleLogin}>
+                <input
+                    className={styles.input}
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                <input
+                    className={styles.input}
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <button className="btn-blue" type="submit">
+                    {isRegistering ? 'Register' : 'Login'}
+                </button>
+            </form>
+            <p className={styles.message}>
+                {isRegistering ? 'Already have an account?' : "Don't have an account?"}
+                <button onClick={() => setIsRegistering(!isRegistering)}>
+                    {isRegistering ? 'Login instead' : 'Register instead'}
+                </button>
+            </p>
         </div>
     )
 }
