@@ -32,17 +32,17 @@
     border-radius: 5px;
 }
 
-.button:hover {
-    background: #0056b3;
-}
-
 .message {
     text-align: center;
     margin-top: 10px;
 }
 
 .text-danger {
-    color: #ff0000;
+    color: var(--color-red);
+}
+
+.button-secondary {
+    color: #007bff;
 }
 
 .link-button {
