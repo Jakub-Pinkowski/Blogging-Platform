@@ -111,7 +111,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                         onClick={() => {
                             handleSubmit((data) => updatePost({ ...data, published: true }))()
                         }}
-                        disabled={!isDirty || !isValid}
+                        disabled={!isValid}
                     >
                         Publish Post
                     </button>

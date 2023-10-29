@@ -36,8 +36,12 @@ export default function Enter(props) {
 function SignInWithGoogle() {
     const router = useRouter()
     const signInWithGoogle = async () => {
-        await auth.signInWithPopup(googleAuthProvider)
-        router.push('/admin')
+        try {
+            await auth.signInWithPopup(googleAuthProvider)
+            router.push('/')
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -58,7 +62,6 @@ function SignInWithEmail() {
     const [password, setPassword] = useState('')
     const [isRegistering, setIsRegistering] = useState(false)
     const [error, setError] = useState(null)
-    const [registrationSuccess, setRegistrationSuccess] = useState(false) // New state
 
     const router = useRouter()
     const { user } = useContext(UserContext)
@@ -68,9 +71,15 @@ function SignInWithEmail() {
 
         try {
             await auth.signInWithEmailAndPassword(email, password)
-            router.push('/admin')
+            router.push('/')
         } catch (error) {
-            setError(error.message)
+            if (error.code === 'auth/invalid-login-credentials') {
+                alert('Invalid email or password. Please check your credentials.')
+                setEmail('')
+                setPassword('')
+            } else {
+                setError(error.message)
+            }
         }
     }
 
@@ -79,7 +88,6 @@ function SignInWithEmail() {
 
         try {
             await auth.createUserWithEmailAndPassword(email, password)
-            setRegistrationSuccess(true)
         } catch (error) {
             setError(error.message)
         }
@@ -141,6 +149,7 @@ function UsernameForm() {
     const [isValid, setIsValid] = useState(false)
     const [loading, setLoading] = useState(false)
     const [imageUrl, setImageUrl] = useState('')
+    const router = useRouter()
 
     useEffect(() => {
         // Get a reference to the storage item
@@ -177,6 +186,7 @@ function UsernameForm() {
         batch.set(usernameDoc, { uid: user.uid })
 
         await batch.commit()
+        router.push('/')
     }
 
     const onChange = (e) => {

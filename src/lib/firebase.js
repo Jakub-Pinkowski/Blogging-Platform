@@ -20,7 +20,6 @@ if (!firebase.apps.length) {
 export const auth = firebase.auth()
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
 
-
 // Firestore exports
 export const firestore = firebase.firestore()
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
