@@ -102,6 +102,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                         minLength: { value: 10, message: 'content is too short' },
                         required: { value: true, message: 'content is required' },
                     })}
+                    style={{ rows: 3, height: '400px' }} 
                 ></textarea>
 
                 <div className="button-container">
