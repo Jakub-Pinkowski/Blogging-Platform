@@ -95,7 +95,7 @@ function SignInWithEmail() {
 
     return (
         <div className={styles.container}>
-            <h2 className={styles.header}>Sign in with email/password instead</h2>
+            <h2 className={styles.header}>Sign in with email/password</h2>
             <h3 className={styles.title}>{isRegistering ? 'Register' : 'Login'}</h3>
             <form className={styles.form} onSubmit={isRegistering ? handleRegister : handleLogin}>
                 <input
