@@ -1,4 +1,4 @@
-import { auth, firestore, googleAuthProvider } from '@/lib/firebase'
+import { auth, firestore, googleAuthProvider, storage } from '@/lib/firebase'
 import { UserContext } from '@/lib/context'
 import Metatags from '@/components/Metatags'
 import { useRouter } from 'next/router'
@@ -120,7 +120,17 @@ function SignInWithEmail() {
 
 // Sign out button
 function SignOutButton() {
-    return <button onClick={() => auth.signOut()}>Sign Out</button>
+    const router = useRouter()
+    const signOutHandler = async () => {
+        await auth.signOut()
+        router.push('/')
+    }
+
+    return (
+        <>
+            <button onClick={signOutHandler}>Sign Out</button>
+        </>
+    )
 }
 
 // Username form
@@ -128,6 +138,23 @@ function UsernameForm() {
     const [formValue, setFormValue] = useState('')
     const [isValid, setIsValid] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [imageUrl, setImageUrl] = useState('')
+
+    useEffect(() => {
+        // Get a reference to the storage item
+        const storageRef = storage.refFromURL('gs://blogging-platform-4ca71.appspot.com/user-2.png')
+
+        // Get the download URL
+        storageRef
+            .getDownloadURL()
+            .then((url) => {
+                setImageUrl(url)
+            })
+            .catch((error) => {
+                // Handle any errors here
+                console.error('Error getting download URL:', error)
+            })
+    }, [])
 
     const { user, username } = useContext(UserContext)
 
@@ -142,7 +169,7 @@ function UsernameForm() {
         const batch = firestore.batch()
         batch.set(userDoc, {
             username: formValue,
-            photoURL: user.photoURL || 'https://thispersondoesnotexist.com',
+            photoURL: user.photoURL || imageUrl,
             displayName: user.displayName || formValue,
         })
         batch.set(usernameDoc, { uid: user.uid })
