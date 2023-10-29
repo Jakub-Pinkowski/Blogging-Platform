@@ -112,10 +112,7 @@ function SignInWithEmail() {
             </form>
             <p className={styles.message}>
                 {isRegistering ? 'Already have an account?' : "Don't have an account?"}
-                <button
-                    className="btn-gray"
-                    onClick={() => setIsRegistering(!isRegistering)}
-                >
+                <button className="btn-gray" onClick={() => setIsRegistering(!isRegistering)}>
                     {isRegistering ? 'Login instead' : 'Register instead'}
                 </button>
             </p>
